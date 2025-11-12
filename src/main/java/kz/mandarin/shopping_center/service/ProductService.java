@@ -12,6 +12,7 @@ import kz.mandarin.shopping_center.repository.UserRepository;
 import kz.mandarin.shopping_center.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,7 @@ public class ProductService {
 
     }
 
-    public Page<Product> searchProducts(ProductSearchCriteria criteria) {
+    public Page<Product> searchProducts(ProductSearchCriteria criteria, Pageable pageable) {
         Specification<Product> specification = Specification.unrestricted();
 
         if (criteria.getCategoryId() != null)
@@ -62,7 +63,7 @@ public class ProductService {
         if (criteria.getSellerId() != null)
             specification = specification.and(ProductSpecification.bySeller(criteria.getSellerId()));
 
-        return productRepository.findAll(specification, criteria.getPageable());
+        return productRepository.findAll(specification, pageable);
     }
 
 	public Product getProductById(Long productId) {

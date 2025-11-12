@@ -1,42 +1,23 @@
 package kz.mandarin.shopping_center.controller;
 
-import jakarta.validation.Valid;
-import kz.mandarin.shopping_center.dto.UserRequest;
-import kz.mandarin.shopping_center.dto.UserResponse;
 import kz.mandarin.shopping_center.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserService userService;
+	private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getUsers() {
-        return ResponseEntity.ok(userService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
-        UserResponse userResponse = userService.findById(id);
-        return ResponseEntity.ok(userResponse);
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
-        UserResponse userResponse = userService.updateUser(id, userRequest);
-        return ResponseEntity.ok(userResponse);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
+	@PostMapping("/update-to-seller")
+	public ResponseEntity<String> updateToSeller(@AuthenticationPrincipal UserDetails userDetails) {
+		userService.updateToSeller(userDetails.getUsername());
+		return ResponseEntity.ok("Updated");
+	}
 }

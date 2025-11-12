@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class ProductSpecification {
     public static Specification<Product> byCategory(Long categoryId) {
         return (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("category"), categoryId);
+                criteriaBuilder.equal(root.join("category").get("id"), categoryId);
     }
 
     public static Specification<Product> priceGreaterThan(BigDecimal price) {

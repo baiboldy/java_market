@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/example")
 @RequiredArgsConstructor
 public class ExampleController {
-    private final UserService service;
+	private final UserService service;
 
-    @GetMapping
-    public String example() {
-        return "Hello, world!";
-    }
+	@GetMapping
+	public String example() {
+		return "Hello, world!";
+	}
 
-    @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String exampleAdmin() {
-        return "Hello, admin!";
-    }
+	@GetMapping("/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String exampleAdmin() {
+		return "Hello, admin!";
+	}
 
-//    @GetMapping("/get-admin")
-//    public void getAdmin() {
-//        service.getAdmin();
-//    }
 }
