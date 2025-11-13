@@ -10,13 +10,13 @@ import java.util.List;
 @Builder
 @Data
 public class ProductPageableResponseDto {
-	private List<Product> products;
+	private List<ProductDto> products;
 	private int page;
 	private int size;
 	private int totalPages;
 	private Long totalElements;
 
-	public static ProductPageableResponseDto productToDto(Page<Product> products) {
+	public static ProductPageableResponseDto productToDto(Page<ProductDto> products) {
 		return ProductPageableResponseDto.builder()
 				.page(products.getPageable().getPageNumber())
 				.size(products.getPageable().getPageSize())

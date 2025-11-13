@@ -1,6 +1,7 @@
 package kz.mandarin.shopping_center.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@Data
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

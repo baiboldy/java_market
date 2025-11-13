@@ -17,15 +17,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    @Transactional
-    public Product createProduct(ProductCreateRequest productRequest, Long sellerId) {
-        User seller = userRepository.findById(sellerId).orElseThrow(() -> new RuntimeException("User not found"));
+    public Product createProduct(ProductCreateRequest productRequest, String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
         Product product = new Product();
         product.setTitle(productRequest.getTitle());
@@ -38,8 +38,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product updateStock(Long productId, Integer newStock, Long sellerId) {
-        Product product = productRepository.findByIdAndSellerId(productId, sellerId).orElseThrow(() -> new RuntimeException("Product not found"));
+    public Product updateStock(Long productId, Integer newStock, String username) {
+        Product product = productRepository.findByIdAndSellerUsername(productId, username).orElseThrow(() -> new RuntimeException("Product not found"));
         product.setStockQuantity(newStock);
         if (newStock == 0) {
             product.setStatus(ProductStatus.OUT_OF_STOCK);
@@ -66,7 +66,7 @@ public class ProductService {
         return productRepository.findAll(specification, pageable);
     }
 
-	public Product getProductById(Long productId) {
+	public Product getProductById(Long productId) throws  RuntimeException {
 		return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
 	}
 
