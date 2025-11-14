@@ -24,8 +24,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    public Product createProduct(ProductCreateRequest productRequest, String username) {
-        User seller = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    public Product createProduct(ProductCreateRequest productRequest, Long userId) {
+        User seller = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         Product product = new Product();
         product.setTitle(productRequest.getTitle());
@@ -38,8 +38,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product updateStock(Long productId, Integer newStock, String username) {
-        Product product = productRepository.findByIdAndSellerUsername(productId, username).orElseThrow(() -> new RuntimeException("Product not found"));
+    public Product updateStock(Long productId, Integer newStock, Long userId) {
+        Product product = productRepository.findByIdAndSellerId(productId, userId).orElseThrow(() -> new RuntimeException("Product not found"));
         product.setStockQuantity(newStock);
         if (newStock == 0) {
             product.setStatus(ProductStatus.OUT_OF_STOCK);
@@ -66,7 +66,7 @@ public class ProductService {
         return productRepository.findAll(specification, pageable);
     }
 
-	public Product getProductById(Long productId) throws  RuntimeException {
+	public Product getProductById(Long productId) {
 		return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
 	}
 
